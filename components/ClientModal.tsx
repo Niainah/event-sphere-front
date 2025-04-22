@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import {  X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
 
-export default function ClientModal({ isOpen, onClose }) {
+interface ClientModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function ClientModal({ isOpen, onClose }: ClientModalProps) {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [cin, setCin] = useState('');
     const [occupation, setOccupation] = useState('');
   
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event:any) => {
       event.preventDefault();
   
       const clientData = {

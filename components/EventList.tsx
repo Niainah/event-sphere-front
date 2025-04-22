@@ -4,52 +4,14 @@ import Image from 'next/image';
 import eventnoir from "../public/eventnoire.jpg";
 import eventblanc from "../public/eventblanc.jpg";
 import { 
-  Sun, Moon, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, 
-  ChevronDown, ChevronUp, Send, User, Clock, Users, Handshake, Search, Filter, X,
+  Sun, Moon, Heart, MessageCircle, MoreHorizontal, 
+  ChevronDown, ChevronUp, Send, User,Users, Handshake, Search, Filter, X,
   Menu, Home, Newspaper, Mail, Calendar
 } from 'lucide-react';
 import Link from 'next/link';
 import Separator from './Separator';
+import { Collaborator, Partner,Event ,Comment} from '@/lib/types';
 
-// Types
-interface Collaborator {
-  id: number;
-  user_id: string;
-  role: string;
-  avatar?: string;
-  name?: string;
-}
-
-interface Comment {
-  id: number;
-  event_id: number;
-  content: string;
-  username?: string;
-  created_at: string;
-  avatar?: string;
-}
-
-interface Partner {
-  id: number;
-  full_name: string;
-  offered_help?: string;
-  logo?: string;
-}
-
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  image?: string;
-  category_id?: string;
-  budget?: string;
-  currency_id?: string;
-  created_by?: string;
-  updated_at?: string;
-}
 
 const Navbar: React.FC<{ darkMode: boolean; toggleDarkMode: () => void }> = ({ darkMode, toggleDarkMode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -135,7 +97,7 @@ const Navbar: React.FC<{ darkMode: boolean; toggleDarkMode: () => void }> = ({ d
 const EventList: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -212,7 +174,7 @@ const EventList: React.FC = () => {
     }
   };
 
-  const fetchComments = async (eventId: string) => {
+  const fetchComments = async (eventId: number) => {
     try {
       const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_comments/event/${eventId}`);
       const commentsWithAvatars = response.data.map((comment: Comment) => ({
@@ -225,7 +187,7 @@ const EventList: React.FC = () => {
     }
   };
 
-  const fetchCollaborators = async (eventId: string) => {
+  const fetchCollaborators = async (eventId: number) => {
     try {
       const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_collaborators/event/${eventId}`);
       const collaboratorsWithAvatars = response.data.map((collab: Collaborator) => ({
@@ -239,7 +201,7 @@ const EventList: React.FC = () => {
     }
   };
 
-  const fetchPartners = async (eventId: string) => {
+  const fetchPartners = async (eventId: number) => {
     try {
       const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_partners/event/${eventId}`);
       const partnersWithLogos = response.data.map((partner: Partner) => ({
@@ -252,7 +214,7 @@ const EventList: React.FC = () => {
     }
   };
 
-  const handleShowDetails = (eventId: string) => {
+  const handleShowDetails = (eventId: number) => {
     setSelectedEventId(eventId === selectedEventId ? null : eventId);
     if (eventId !== selectedEventId) {
       fetchComments(eventId);
@@ -261,7 +223,7 @@ const EventList: React.FC = () => {
     }
   };
 
-  const handlePostComment = async (eventId: string) => {
+  const handlePostComment = async (eventId: number) => {
     if (!newComment.trim()) return;
 
     try {
@@ -512,9 +474,9 @@ const EventList: React.FC = () => {
                                   key={comment.id} 
                                   className={`p-2 rounded-lg flex text-sm ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}
                                 >
-                                  <img 
-                                    src={comment.avatar} 
-                                    alt={comment.username} 
+                                  <Image 
+                                    src={comment.avatar || "https://i.pravatar.cc/150?u=currentuser"} 
+                                    alt={comment.username || "image"} 
                                     className="w-6 h-6 rounded-full mr-2"
                                   />
                                   <div className="flex-1">
@@ -534,7 +496,7 @@ const EventList: React.FC = () => {
                         
                         <div className="mt-2">
                           <div className="flex items-center">
-                            <img 
+                            <Image 
                               src="https://i.pravatar.cc/150?u=currentuser" 
                               alt="Votre avatar" 
                               className="w-6 h-6 rounded-full mr-2"
@@ -582,9 +544,9 @@ const EventList: React.FC = () => {
                                   key={collab.id} 
                                   className={`p-2 rounded-lg flex items-center mout text-xs ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}
                                 >
-                                  <img 
-                                    src={collab.avatar} 
-                                    alt={collab.name} 
+                                  <Image 
+                                    src={collab.avatar || "https://i.pravatar.cc/150?u=currentuser"} 
+                                    alt={collab.name || "name"} 
                                     className="w-6 h-6 rounded-full mr-2 object-cover"
                                   />
                                   <div>
@@ -621,7 +583,7 @@ const EventList: React.FC = () => {
                                   className={`p-2 rounded-lg flex items-center text-xs ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}
                                 >
                                   {partner.logo ? (
-                                    <img 
+                                    <Image 
                                       src={partner.logo} 
                                       alt={partner.full_name} 
                                       className="w-6 h-6 rounded-full mr-2 object-contain"
@@ -655,9 +617,16 @@ const EventList: React.FC = () => {
                   <Search className="text-gray-500" size={24} />
                 </div>
                 <h3 className="text-lg font-medium mb-1">Aucun événement trouvé</h3>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+                >
+                  Créer l&apos;événement
+                </button>
                 <p className={`max-w-md mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  Essayez d'ajuster votre recherche ou vos filtres pour trouver ce que vous cherchez.
+                  Essayez d&apos;ajuster votre recherche ou vos filtres pour trouver ce que vous cherchez.
                 </p>
+
                 <button
                   onClick={resetFilters}
                   className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"

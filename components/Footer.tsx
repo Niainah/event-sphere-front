@@ -71,7 +71,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter Section */}
           <div>
             <h3 className="text-xl font-semibold mb-6 text-green-400 border-b border-green-400/30 pb-2">
               Stay Updated

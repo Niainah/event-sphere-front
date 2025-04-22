@@ -249,8 +249,9 @@ export default function EventModal({ isOpen, onClose }) {
                   type="submit"
                   className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
                 >
-                  Créer l'événement
+                  Créer l&apos;événement
                 </button>
+
               </div>
             </form>
           )}

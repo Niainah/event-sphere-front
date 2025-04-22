@@ -14,7 +14,7 @@ const useThemeStore = create((set) => ({
     return false;
   })(),
   toggleTheme: () =>
-    set((state) => {
+    set((state:any) => {
       const newTheme = !state.isDark;
       localStorage.setItem("theme", JSON.stringify(newTheme));
       document.documentElement.classList.toggle("dark", newTheme);
