@@ -24,9 +24,9 @@ export default function EventModal({ isOpen, onClose }) {
           setIsLoading(true);
           try {
             const [currenciesRes, categoriesRes, usersRes] = await Promise.all([
-              fetch('http://localhost:3001/api/currencies'),
-              fetch('http://localhost:3001/api/event_categories'),
-              fetch('http://localhost:3001/api/users')
+              fetch('https://event-sphere-back-production.up.railway.app/currencies'),
+              fetch('https://event-sphere-back-production.up.railway.app/event_categories'),
+              fetch('https://event-sphere-back-production.up.railway.app/users')
             ]);
   
             const currenciesData = await currenciesRes.json();
@@ -69,7 +69,7 @@ export default function EventModal({ isOpen, onClose }) {
       };
   
       try {
-        const response = await fetch('http://localhost:3001/api/events', {
+        const response = await fetch('https://event-sphere-back-production.up.railway.app/events', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

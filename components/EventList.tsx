@@ -187,7 +187,7 @@ const EventList: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get('http://localhost:3001/api/events');
+      const response = await axios.get('https://event-sphere-back-production.up.railway.app/events');
 
       if (!Array.isArray(response.data)) {
         console.error('Les données reçues ne sont pas un tableau:', response.data);
@@ -211,7 +211,7 @@ const EventList: React.FC = () => {
 
   const fetchComments = async (eventId: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/event_comments/event/${eventId}`);
+      const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_comments/event/${eventId}`);
       const commentsWithAvatars = response.data.map((comment: Comment) => ({
         ...comment,
         avatar: `https://i.pravatar.cc/150?u=${comment.username || 'anonymous'}`
@@ -224,7 +224,7 @@ const EventList: React.FC = () => {
 
   const fetchCollaborators = async (eventId: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/event_collaborators/event/${eventId}`);
+      const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_collaborators/event/${eventId}`);
       const collaboratorsWithAvatars = response.data.map((collab: Collaborator) => ({
         ...collab,
         avatar: `https://i.pravatar.cc/150?u=${collab.user_id}`,
@@ -238,7 +238,7 @@ const EventList: React.FC = () => {
 
   const fetchPartners = async (eventId: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/event_partners/event/${eventId}`);
+      const response = await axios.get(`https://event-sphere-back-production.up.railway.app/event_partners/event/${eventId}`);
       const partnersWithLogos = response.data.map((partner: Partner) => ({
         ...partner,
         logo: `https://logo.clearbit.com/${partner.full_name.replace(/\s/g, '')}.com`
@@ -262,7 +262,7 @@ const EventList: React.FC = () => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await axios.post('http://localhost:3001/api/event_comments', {
+      const response = await axios.post('https://event-sphere-back-production.up.railway.app/event_comments', {
         event_id: eventId,
         content: newComment,
       });

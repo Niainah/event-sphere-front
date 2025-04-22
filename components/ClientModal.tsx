@@ -18,7 +18,7 @@ export default function ClientModal({ isOpen, onClose }) {
       };
   
       try {
-        const response = await fetch('http://localhost:3001/api/clients', {
+        const response = await fetch('https://event-sphere-back-production.up.railway.app/clients', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
