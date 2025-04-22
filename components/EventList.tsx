@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+import eventnoir from "../public/eventnoire.jpg";
+import eventblanc from "../public/eventblanc.jpg";
 import { 
   Sun, Moon, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, 
   ChevronDown, ChevronUp, Send, User, Clock, Users, Handshake, Search, Filter, X,
@@ -438,11 +441,12 @@ const EventList: React.FC = () => {
                   </div>
 
                   <div className="relative group">
-                    <img 
-                      src={event.image || 'https://via.placeholder.com/600x600'} 
+                  <Image 
+                      src={darkMode? eventblanc : eventnoir }
                       alt={event.title || 'Événement'} 
                       className="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-90"
                     />
+                    
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <button className="bg-white bg-opacity-80 rounded-full p-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                         <Heart size={24} className="text-pink-500" />
