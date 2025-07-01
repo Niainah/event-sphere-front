@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-
 interface ClientModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,36 +11,46 @@ export default function ClientModal({ isOpen, onClose }: ClientModalProps) {
     const [cin, setCin] = useState('');
     const [occupation, setOccupation] = useState('');
   
-    const handleSubmit = async (event:any) => {
-      event.preventDefault();
-  
-      const clientData = {
-        full_name: fullName,
-        email,
-        cin,
-        occupation,
-      };
-  
-      try {
-        const response = await fetch('https://event-sphere-back-production.up.railway.app/clients', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(clientData),
-        });
-  
-        if (response.ok) {
-          alert('Client créé avec succès');
-          onClose();
-        } else {
-          alert('Erreur lors de la création du client');
-        }
-      } catch (error) {
-        console.error('Erreur:', error);
-        alert('Erreur lors de la connexion au serveur');
-      }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const clientData = {
+      full_name: fullName,
+      email,
+      cin,
+      occupation,
     };
+
+    try {
+      const emailResponse = await fetch('/api/send-client-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clientData),
+      });
+
+      if (!emailResponse.ok) {
+        alert('Erreur lors de l\'envoi de l\'email');
+        return;
+      }
+
+    const response = await fetch('https://event-sphere-back-production.up.railway.app/clients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(clientData),
+    });
+
+    if (response.ok) {
+      alert('Client créé avec succès et email envoyé');
+      onClose();
+    } else {
+      alert('Erreur lors de la création du client');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert('Erreur lors de la connexion au serveur');
+  }
+    };
+
   
     if (!isOpen) return null;
   
